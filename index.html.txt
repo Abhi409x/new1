@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Riya ❤️</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:radial-gradient(circle,#1a2a6c,#0f2027);
+  color:white;
+  overflow:hidden;
+}
+
+/* STARS */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation:twinkle 2s infinite alternate;
+}
+@keyframes twinkle{
+  from{opacity:0.2} to{opacity:1}
+}
+
+/* GLOW */
+.glow{
+  position:absolute;
+  width:300px;
+  height:300px;
+  background:rgba(255,0,100,0.3);
+  filter:blur(120px);
+  border-radius:50%;
+  top:20%;
+  left:30%;
+}
+
+/* CENTER */
+.center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+}
+
+/* GLASS */
+.glass{
+  background:rgba(255,255,255,0.1);
+  padding:20px;
+  border-radius:20px;
+  backdrop-filter:blur(15px);
+}
+
+/* BUTTON */
+.btn{
+  padding:12px 25px;
+  border:none;
+  border-radius:30px;
+  background:#ff2e63;
+  color:white;
+  font-size:18px;
+  margin-top:15px;
+}
+
+/* IMAGE */
+img{
+  width:240px;
+  border-radius:15px;
+  margin-top:10px;
+  animation:zoom 6s infinite alternate;
+}
+@keyframes zoom{
+  from{transform:scale(1)} to{transform:scale(1.1)}
+}
+
+/* PAGE */
+.page{
+  position:absolute;
+  width:100%;
+  top:50%;
+  transform:translateY(-50%);
+  text-align:center;
+  transition:0.6s;
+}
+.hidden{ transform:translateX(100%); }
+.show{ transform:translateX(0); }
+
+/* HEART */
+.heart{
+  font-size:35px;
+  margin-top:10px;
+  cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<script>
+for(let i=0;i<120;i++){
+  let s=document.createElement("div");
+  s.className="star";
+  s.style.top=Math.random()*100+"%";
+  s.style.left=Math.random()*100+"%";
+  document.body.appendChild(s);
+}
+</script>
+
+<!-- INTRO -->
+<div id="intro" class="center glass">
+  <h2>Someone special is born today ✨</h2>
+  <h1 id="count">3</h1>
+  <button class="btn" onclick="start()">Start 💖</button>
+</div>
+
+<!-- PAGE 1 -->
+<div id="p1" class="page hidden">
+  <div class="glass">
+    <h1>Happy Birthday Riya ❤️</h1>
+    <img src="riya.jpg">
+    <p id="t1"></p>
+    <div class="heart" onclick="next(2)">❤️</div>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="p2" class="page hidden">
+  <div class="glass">
+    <p id="t2"></p>
+    <div class="heart" onclick="next(3)">❤️</div>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div id="p3" class="page hidden">
+  <div class="glass">
+    <p id="t3"></p>
+    <div class="heart">💖</div>
+  </div>
+</div>
+
+<!-- MUSIC -->
+<audio id="song" preload="auto">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* COUNTDOWN */
+let c=3;
+let cd=setInterval(()=>{
+  if(c>1){
+    c--;
+    count.innerText=c;
+  }else{
+    count.innerText="🎉";
+    clearInterval(cd);
+  }
+},1000);
+
+/* 🔥 START (DOUBLE SAFE MUSIC FIX) */
+function start(){
+  let song=document.getElementById("song");
+
+  // reset
+  song.pause();
+  song.currentTime = 0;
+
+  // play (safe)
+  let playPromise = song.play();
+
+  if(playPromise !== undefined){
+    playPromise.then(()=>{}).catch(()=>{
+      // fallback click retry
+      document.body.addEventListener("click", ()=>{
+        song.play();
+      }, {once:true});
+    });
+  }
+
+  intro.style.display="none";
+  showPage("p1");
+
+  type("t1",messages[0]);
+}
+
+/* SHOW PAGE */
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+  let el=document.getElementById(id);
+  el.classList.remove("hidden");
+  el.classList.add("show");
+}
+
+/* NEXT */
+function next(n){
+  showPage("p"+n);
+  type("t"+n,messages[n-1]);
+}
+
+/* TYPE */
+function type(id,msg){
+  let el=document.getElementById(id);
+  el.innerHTML="";
+  let i=0;
+  let t=setInterval(()=>{
+    el.innerHTML+=msg[i];
+    i++;
+    if(i>=msg.length) clearInterval(t);
+  },35);
+}
+
+/* MESSAGES */
+let messages=[
+"Dear Riya 💖, Meri Moti Aapko Janamdin ki bohot sari shubhkamnaye.",
+"Aap hamesha khush raho aur apni health ka dhyan rakho 🌸",
+"Aap life me bohot success pao 🚀, Aapka jo sapna ho bagwan pura kre."
+];
+
+</script>
+
+</body>
+</html>
